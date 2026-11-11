@@ -61,8 +61,8 @@ const candles = [
 
   <p class="hint hand" data-in id="hint" aria-live="polite">
     <span class="hint-text">toca las velitas para apagarlas</span>
+    <Doodle type="arrow" color="var(--ink)" size={64} rot={168} draw class="h-arrow" />
   </p>
-  <Doodle type="arrow" color="var(--ink)" size={70} rot={168} draw class="h-arrow" />
 
   <a class="scroll-cue hand" href="#collage" data-in data-scroll-to="#collage" aria-label="Ir al collage">
     bajar
@@ -86,9 +86,9 @@ const candles = [
   }
   .rm .l2 .hl { transform: rotate(-1.2deg) scaleX(1); }
   .age {
-    display: inline-grid; place-items: center; width: 0.55em; height: 0.55em; margin-left: 0.25em; vertical-align: top;
-    font-size: 0.55em; border-radius: 50%; background: var(--sky); color: #fff; border: 4px solid var(--ink);
-    transform: rotate(14deg); text-shadow: 2px 2px 0 var(--ink);
+    display: inline-grid; place-items: center; box-sizing: border-box; width: 1.9em; height: 1.9em; margin-left: 0.35em; vertical-align: top;
+    font-size: clamp(1.4rem, 6.2vw, 3rem); line-height: 1; border-radius: 50%; background: var(--sky); color: #fff;
+    border: 3px solid var(--ink); text-shadow: 2px 2px 0 var(--ink); transform: rotate(14deg);
   }
 
   .cake-wrap { width: min(400px, 78vw); margin-top: 1.5rem; z-index: 2; }
@@ -97,8 +97,8 @@ const candles = [
   .candle:focus-visible .flame { filter: drop-shadow(0 0 6px var(--berry)); }
   .flame { transform-box: fill-box; transform-origin: 50% 100%; }
 
-  .hint { margin: 0.6rem 0 0; font-size: clamp(1.6rem, 4.4vw, 2.2rem); color: var(--ink); position: relative; z-index: 2; }
-  :global(.h-arrow) { left: 50%; margin-left: 150px; bottom: 21%; opacity: 0.8; }
+  .hint { display: inline-block; margin: 0.6rem 0 0; font-size: clamp(1.6rem, 4.4vw, 2.2rem); color: var(--ink); position: relative; z-index: 2; }
+  :global(.h-arrow) { left: 100%; margin-left: 0.4rem; top: -2.6rem; opacity: 0.8; }
   .scroll-cue {
     position: absolute; bottom: 1.1rem; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center;
     gap: 0; font-size: 1.5rem; text-decoration: none; color: var(--ink); opacity: 0.75;
@@ -107,6 +107,15 @@ const candles = [
   :global(.h-d1) { top: 9%; left: 7%; } :global(.h-d2) { top: 14%; right: 8%; } :global(.h-d3) { top: 38%; left: 16%; }
   :global(.h-d4) { bottom: 22%; left: 8%; } :global(.h-d5) { bottom: 26%; right: 9%; } :global(.h-d6) { top: 30%; right: 18%; }
 
+  @media (max-height: 560px) and (orientation: landscape) {
+    .hero { padding-top: 2rem; padding-bottom: 3.5rem; }
+    .l1 { font-size: clamp(2rem, 5.5vw, 3.2rem); }
+    .l2 { font-size: clamp(3rem, 9vw, 5.5rem); }
+    .cake-wrap { width: 190px; margin-top: 0.6rem; }
+    .hint { font-size: 1.4rem; margin-top: 0.2rem; }
+    .scroll-cue { display: none; }
+    :global(.h-arrow) { display: none; }
+  }
   @media (max-width: 640px) {
     :global(.h-arrow) { display: none; }
     :global(.h-d1) { top: 4%; left: 2%; width: 64px; height: 64px; } :global(.h-d2) { top: 5%; right: 3%; width: 52px; height: 52px; }

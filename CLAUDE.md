@@ -52,3 +52,9 @@ Duke = perro actual; el Quinto = perro anterior (foto 7).
 2. Resolver dudas: foto 42, orden de "tú y yo", describir las 16 fotos sin pie.
 3. Cuando él lo pida: `git add/commit/push` (rama main) y activar GitHub Pages (workflow `withastro/action` o Settings → Pages → GitHub Actions). Atribución de commits según el system-reminder.
 4. Opcional: probar en celular real; revisar rendimiento (52 imágenes lazy) y accesibilidad.
+
+## Responsive (2026-11-11, sin publicar aún)
+Probado con Edge headless + puppeteer-core (scripts en el scratchpad de la sesión, no en el repo) en 360x740, 390x844, 844x390, 768x1024, 1440x900 y 2560x1300: sin desborde horizontal ni errores de consola, visor y carta funcionan.
+Arreglos: `overflow-x: clip` también en `html` (los garabatos con `right:-1%` ensanchaban el viewport móvil); sello de edad rediseñado; visor con `minmax(0,1fr)` para que quepa el botón "siguiente" en móvil; hero compacto en horizontal bajo 560 px de alto; muro de 4 columnas desde 1500 px y 5 desde 2200 px; flecha de la tarta dentro del hint; cinta de polaroid aparece después de que la foto aterriza.
+La barra oscura inferior en capturas es la **Astro dev toolbar** (solo en dev).
+**Estos cambios están solo en local: falta commit + push para que el link público los tenga.**

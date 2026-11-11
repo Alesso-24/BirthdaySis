@@ -195,7 +195,7 @@ if (!reduce) {
         { y: 170, x: () => rand(-90, 90), rotation: () => rand(-34, 34), scale: 0.6, opacity: 0 },
         { y: 0, x: 0, rotation: (_i, el) => parseFloat(el.dataset.rot), scale: 1, opacity: 1, duration: 1.05, ease: 'back.out(1.5)', stagger: 0.12, overwrite: 'auto' }
       );
-      gsap.to(batch.map((b) => $('.tape', b)), { scaleX: 1, duration: 0.35, ease: 'power2.out', delay: 0.6, stagger: 0.12 });
+      gsap.to(batch.map((b) => $('.tape', b)), { scaleX: 1, duration: 0.35, ease: 'power2.out', delay: 0.95, stagger: 0.12 });
     },
   });
 }

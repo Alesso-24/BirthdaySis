@@ -14,7 +14,7 @@
 }
 
 * { box-sizing: border-box; }
-html { background: var(--cream); }
+html { background: var(--cream); overflow-x: clip; -webkit-text-size-adjust: 100%; }
 html.lenis, html.lenis body { height: auto; }
 .lenis.lenis-smooth { scroll-behavior: auto !important; }
 .lenis.lenis-stopped { overflow: hidden; }
@@ -86,3 +86,7 @@ button { font: inherit; color: inherit; }
 .rm .chapter-head .ch-note, .rm .scroll-cue { opacity: 1; }
 .rm .chapter-head .ch-note { opacity: 0.75; }
 .rm .scroll-cue { opacity: 0.75; }
+
+/* táctil: sin menú de mantener-presionado en fotos, taps rápidos */
+.pol, .pol-in img { -webkit-touch-callout: none; touch-action: manipulation; }
+@media (max-width: 380px) { body { font-size: 1.15rem; } }
