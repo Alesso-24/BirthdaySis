@@ -1,0 +1,153 @@
+{
+  "meta": {
+    "name": "Verónica",
+    "age": 18,
+    "from": "Jordi",
+    "letterTitle": "Para ti",
+    "letter": [
+      "Aquí junté un poco de todo lo que hemos vivido: tú de chiquita y traviesa, el cerro y los campamentos, la guitarra, el Duke, mamá, la familia entera.",
+      "Gracias por ser mi compañera de aventuras, mi cómplice y la que siempre me hace reír.",
+      "Que este año te traiga todo lo bonito que mereces. Te quiero muchísimo."
+    ]
+  },
+  "categories": [
+    {
+      "id": "c1",
+      "title": "chiquita y traviesa",
+      "note": "así empezó todo",
+      "photos": [
+        24,
+        40,
+        41,
+        17,
+        50,
+        44
+      ]
+    },
+    {
+      "id": "c2",
+      "title": "aventuras de niños",
+      "note": "cerro, campamento y mucho sol",
+      "photos": [
+        18,
+        46,
+        48,
+        4,
+        21,
+        12,
+        5,
+        1,
+        9
+      ]
+    },
+    {
+      "id": "c3",
+      "title": "tú y yo",
+      "note": "mi compañera de aventuras",
+      "photos": [
+        16,
+        2,
+        45,
+        29,
+        13,
+        28,
+        51,
+        52,
+        30,
+        26,
+        27,
+        37
+      ]
+    },
+    {
+      "id": "c4",
+      "title": "mamá",
+      "note": "la que más te ama",
+      "photos": [
+        6,
+        49,
+        47,
+        31,
+        23
+      ]
+    },
+    {
+      "id": "c5",
+      "title": "la familia",
+      "note": "navidades, vacaciones y todos juntos",
+      "photos": [
+        3,
+        14,
+        15,
+        34,
+        42,
+        39,
+        35,
+        36
+      ]
+    },
+    {
+      "id": "c6",
+      "title": "Duke y compañía",
+      "note": "los mejores amigos peludos",
+      "photos": [
+        7,
+        25,
+        19,
+        20,
+        38
+      ]
+    },
+    {
+      "id": "c7",
+      "title": "tú, tal cual",
+      "note": "mírate nada más",
+      "photos": [
+        8,
+        10,
+        11,
+        43,
+        22,
+        32,
+        33
+      ]
+    }
+  ],
+  "captions": {
+    "1": "hasta Cancún y un submarino",
+    "3": "con el abuelo",
+    "6": "con cara traviesa viendo el postre de mamá",
+    "7": "con el quinto (nuestro anterior perro)",
+    "8": "CHIVA HERMANA DE CORAZÓN",
+    "9": "en los carritos chocones",
+    "17": "traviesa desde chiquita",
+    "18": "ir al cerro desde niños",
+    "19": "con tu nuevo mejor amigo el duke (nuestro actual perro)",
+    "20": "con la abuela y el duke",
+    "23": "pandemia con mamá",
+    "24": "de bebé",
+    "25": "cuando llegó el duke a tu vida",
+    "26": "con amor tu hermano, te amo niña",
+    "27": "yo con ella",
+    "28": "cuando tocábamos la guitarra juntos",
+    "29": "mi compañera de aventuras",
+    "31": "tu madre que te ama tanto",
+    "32": "la consentida de la casa",
+    "33": "fan de tus hot dogs con tu sidral mundet",
+    "34": "navidad con las primas",
+    "35": "la familia",
+    "36": "te amamos todos (familia y amigos)",
+    "37": "yo con ella",
+    "38": "hasta el duke se vistió con gorrito de cumpleaños para celebrarte",
+    "39": "de vacaciones la familia",
+    "40": "con papá y mamá",
+    "41": "viendo a mamá",
+    "42": "los primeros meses cuando nos mudamos a puebla",
+    "44": "tu vibra en una foto",
+    "46": "corriendo con el abuelo subiendo el cerro",
+    "47": "siempre bella como tu madre",
+    "48": "cuando íbamos de campamento",
+    "49": "en un ferri por descubrir nuevas aventuras con mamá y papá",
+    "50": "tu primera guitarra"
+  }
+}

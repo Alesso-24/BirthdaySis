@@ -1,0 +1,51 @@
+---
+// Garabatos dibujados a mano (SVG). `speed` los mueve con parallax al hacer scroll.
+interface Props {
+  type: 'star' | 'heart' | 'flower' | 'squiggle' | 'spiral' | 'arrow' | 'sun' | 'sparkle' | 'cloud';
+  color?: string;
+  tint?: string;
+  size?: number;
+  rot?: number;
+  speed?: number;
+  style?: string;
+  class?: string;
+  draw?: boolean;
+}
+const { type, color = 'var(--ink)', tint, size = 64, rot = 0, speed = 0, style = '', class: cls = '', draw = false } = Astro.props;
+const d = draw ? { 'data-draw': '', pathLength: 1 } : {};
+---
+<svg
+  class={`doodle ${cls}`}
+  viewBox="0 0 100 100"
+  width={size}
+  height={size}
+  data-speed={speed || undefined}
+  data-rot={rot}
+  style={`color:${color};${tint ? `--tint:${tint};` : ''}transform:rotate(${rot}deg);filter:url(#wobble);${style}`}
+  aria-hidden="true"
+  focusable="false"
+>
+  {type === 'star' && <path class="tint" {...d} d="M50 9 L61 38 L92 40 L68 60 L77 91 L50 74 L24 92 L32 60 L8 41 L39 38 Z" />}
+  {type === 'heart' && <path class="tint" {...d} d="M50 86 C12 60 7 31 28 23 C40 19 48 26 50 35 C53 26 62 19 74 23 C94 31 89 60 50 86 Z" />}
+  {type === 'flower' && (
+    <>
+      <circle class="tint" {...d} cx="50" cy="26" r="16" />
+      <circle class="tint" {...d} cx="74" cy="44" r="16" />
+      <circle class="tint" {...d} cx="65" cy="72" r="16" />
+      <circle class="tint" {...d} cx="35" cy="72" r="16" />
+      <circle class="tint" {...d} cx="26" cy="44" r="16" />
+      <circle class="solid" cx="50" cy="50" r="10" />
+    </>
+  )}
+  {type === 'squiggle' && <path {...d} d="M6 52 q 11 -30 22 0 t 22 0 t 22 0 t 22 0" />}
+  {type === 'spiral' && <path {...d} d="M50 50 a4 4 0 0 1 8 0 a10 10 0 0 1 -20 0 a18 18 0 0 1 36 0 a26 26 0 0 1 -52 0 a34 34 0 0 1 68 0" />}
+  {type === 'arrow' && <path {...d} d="M8 74 C 28 18, 66 14, 88 56 M88 56 L 68 54 M88 56 L 82 36" />}
+  {type === 'sun' && (
+    <>
+      <circle class="tint" {...d} cx="50" cy="50" r="17" />
+      <path {...d} d="M50 8 V22 M50 78 V92 M8 50 H22 M78 50 H92 M20 20 L30 30 M70 70 L80 80 M80 20 L70 30 M30 70 L20 80" />
+    </>
+  )}
+  {type === 'sparkle' && <path class="tint" {...d} d="M50 6 Q 54 46 94 50 Q 54 54 50 94 Q 46 54 6 50 Q 46 46 50 6 Z" />}
+  {type === 'cloud' && <path class="tint" {...d} d="M24 72 C 8 72 6 50 24 48 C 24 28 52 22 60 40 C 78 32 94 50 80 66 C 78 72 70 72 66 72 Z" />}
+</svg>

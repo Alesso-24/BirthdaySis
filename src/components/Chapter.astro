@@ -1,0 +1,117 @@
+---
+import { Image } from 'astro:assets';
+import Doodle from './Doodle.astro';
+
+interface Item { n: number; src: ImageMetadata; full: string; cap: string }
+interface Props { num: number; title: string; note: string; items: Item[]; accent: string; tintAccent: string }
+const { num, title, note, items, accent, tintAccent } = Astro.props;
+
+const tapes = ['#f7a9bb', '#a9d6b8', '#fbe29a', '#cdbdf0', '#a9cdf2'];
+const rnd = (n: number) => { const x = Math.sin(n * 9301 + 49297) * 233280; return x - Math.floor(x); };
+
+// garabatos esparcidos por cada capítulo (posición en %, velocidad de parallax)
+const sets = [
+  [
+    { type: 'star', top: '14%', left: '-1%', size: 58, rot: 12, speed: 0.25, color: 'var(--butter)', tint: '#fbe29a' },
+    { type: 'heart', top: '38%', right: '-1%', size: 52, rot: -10, speed: 0.4, color: 'var(--berry)', tint: '#f7a9bb' },
+    { type: 'squiggle', top: '62%', left: '1%', size: 90, rot: 8, speed: 0.2, color: 'var(--sky)' },
+    { type: 'flower', top: '84%', right: '2%', size: 72, rot: 14, speed: 0.5, color: 'var(--peach)', tint: '#fbd3c2' },
+  ],
+  [
+    { type: 'sparkle', top: '10%', right: '0%', size: 54, rot: 0, speed: 0.35, color: 'var(--lilac)', tint: '#e0d6f6' },
+    { type: 'cloud', top: '30%', left: '-2%', size: 96, rot: -6, speed: 0.2, color: 'var(--sky)', tint: '#d6e8fa' },
+    { type: 'spiral', top: '55%', right: '1%', size: 66, rot: 20, speed: 0.45, color: 'var(--sage)' },
+    { type: 'heart', top: '76%', left: '0%', size: 46, rot: 12, speed: 0.3, color: 'var(--berry)', tint: '#f7a9bb' },
+    { type: 'star', top: '92%', right: '8%', size: 50, rot: -16, speed: 0.55, color: 'var(--butter)', tint: '#fbe29a' },
+  ],
+  [
+    { type: 'sun', top: '8%', left: '0%', size: 84, rot: 6, speed: 0.3, color: 'var(--butter)', tint: '#fbe29a' },
+    { type: 'flower', top: '33%', right: '-1%', size: 70, rot: -12, speed: 0.4, color: 'var(--berry)', tint: '#f7a9bb' },
+    { type: 'squiggle', top: '58%', left: '1%', size: 88, rot: -8, speed: 0.22, color: 'var(--lilac)' },
+    { type: 'sparkle', top: '80%', right: '3%', size: 54, rot: 8, speed: 0.5, color: 'var(--sky)', tint: '#d6e8fa' },
+    { type: 'heart', top: '94%', left: '6%', size: 44, rot: -8, speed: 0.35, color: 'var(--berry)', tint: '#f7a9bb' },
+  ],
+];
+const doodles = sets[(num - 1) % sets.length];
+---
+<section class="chapter" id={`cap-${num}`} style={`--accent:${accent};--accent-tint:${tintAccent}`}>
+  {doodles.map((d) => (
+    <Doodle
+      type={d.type as any}
+      color={d.color}
+      tint={d.tint}
+      size={d.size}
+      rot={d.rot}
+      speed={d.speed}
+      class="c-doodle"
+      style={`top:${d.top};${d.left ? `left:${d.left};` : ''}${d.right ? `right:${d.right};` : ''}`}
+    />
+  ))}
+
+  <header class="chapter-head">
+    <span class="stamp" data-stamp><span>{num}</span></span>
+    <h2 class="ch-title" data-ch-title>{title}</h2>
+    <svg class="underline" viewBox="0 0 300 24" preserveAspectRatio="none" aria-hidden="true" style="filter:url(#wobble)">
+      <path data-draw-line pathLength="1" d="M4 14 C 40 2, 70 22, 110 12 S 190 4, 230 14 S 280 8, 296 12" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" />
+    </svg>
+    <p class="ch-note hand" data-ch-note>{note}</p>
+  </header>
+
+  <div class="wall">
+    {items.map((it, i) => {
+      const rot = (rnd(it.n) * 9 - 4.5).toFixed(2);
+      const trot = (rnd(it.n + 9) * 20 - 10).toFixed(1);
+      return (
+        <div class="pol" data-pol data-full={it.full} data-cap={it.cap} tabindex="0" role="button" aria-label={it.cap || `Abrir foto ${it.n}`}>
+          <div class="pol-in" data-rot={rot}>
+            <span class="tape" data-trot={trot} style={`--tape:${tapes[Math.floor(rnd(it.n + 50) * tapes.length)]}`}></span>
+            <Image src={it.src} alt={it.cap || 'Un recuerdo'} width={560} quality={72} format="webp" loading="lazy" decoding="async" draggable="false" />
+            {it.cap && <span class="cap hand">{it.cap}</span>}
+          </div>
+        </div>
+      );
+    })}
+  </div>
+</section>
+
+<style>
+  .chapter { position: relative; max-width: 1120px; margin: 0 auto; padding: 6rem 1.25rem 2rem; }
+  :global(.c-doodle) { z-index: 0; }
+
+  .chapter-head { position: relative; z-index: 1; text-align: center; margin-bottom: 3rem; color: var(--accent); }
+  .stamp {
+    display: inline-grid; place-items: center; width: 3.4rem; height: 3.4rem; border-radius: 50%; background: var(--accent);
+    border: 4px dashed rgba(255, 255, 255, 0.85); outline: 4px solid var(--accent); font-family: var(--display); font-size: 1.9rem;
+    color: #fff; transform: rotate(-10deg); text-shadow: 2px 2px 0 rgba(59, 42, 42, 0.35);
+  }
+  .ch-title { margin: 0.6rem 0 0; font-family: var(--display); font-weight: 400; font-size: clamp(2.5rem, 8.4vw, 4.6rem); line-height: 1; color: var(--ink); }
+  .underline { display: block; width: min(300px, 70%); height: 18px; margin: 0.1rem auto 0; color: var(--accent); }
+  .underline path { stroke-dasharray: 1; stroke-dashoffset: 1; }
+  .rm .underline path { stroke-dashoffset: 0; }
+  .ch-note { margin: 0.2rem 0 0; font-size: 1.7rem; color: var(--ink); opacity: 0.75; transform: rotate(-2deg); }
+
+  .wall { position: relative; z-index: 1; columns: 3 250px; column-gap: 1.9rem; }
+  .pol { position: relative; display: block; width: 100%; margin: 0 0 2.3rem; break-inside: avoid; outline: none; -webkit-tap-highlight-color: transparent; }
+  .pol-in {
+    position: relative; background: #fffdf8; padding: 11px 11px 13px; cursor: grab; will-change: transform;
+    box-shadow: 0 1px 0 rgba(59, 42, 42, 0.08), 0 12px 22px -10px rgba(59, 42, 42, 0.5);
+  }
+  .pol:focus-visible .pol-in { outline: 3px solid var(--sky); outline-offset: 4px; }
+  .pol-in :global(img) { display: block; width: 100%; height: auto; background: var(--cream-2); user-select: none; -webkit-user-drag: none; }
+  .cap { display: block; margin-top: 0.35rem; font-size: 1.6rem; line-height: 1; text-align: center; }
+  .tape {
+    position: absolute; top: -13px; left: 50%; width: 88px; height: 28px; margin-left: -44px; z-index: 2; pointer-events: none;
+    background-color: var(--tape); opacity: 0.9;
+    background-image: repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.4) 0 5px, transparent 5px 11px);
+    clip-path: polygon(0 6%, 3% 0, 6% 8%, 9% 0, 12% 8%, 15% 0, 18% 8%, 21% 0, 24% 8%, 27% 0, 30% 8%, 33% 0, 36% 8%, 39% 0, 42% 8%, 45% 0, 48% 8%, 51% 0, 54% 8%, 57% 0, 60% 8%, 63% 0, 66% 8%, 69% 0, 72% 8%, 75% 0, 78% 8%, 81% 0, 84% 8%, 87% 0, 90% 8%, 93% 0, 96% 8%, 100% 0, 100% 94%, 96% 100%, 93% 92%, 90% 100%, 87% 92%, 84% 100%, 81% 92%, 78% 100%, 75% 92%, 72% 100%, 69% 92%, 66% 100%, 63% 92%, 60% 100%, 57% 92%, 54% 100%, 51% 92%, 48% 100%, 45% 92%, 42% 100%, 39% 92%, 36% 100%, 33% 92%, 30% 100%, 27% 92%, 24% 100%, 21% 92%, 18% 100%, 15% 92%, 12% 100%, 9% 92%, 6% 100%, 3% 92%, 0 100%);
+  }
+
+  @media (max-width: 560px) {
+    .chapter { padding-top: 4.5rem; }
+    .wall { columns: 2; column-gap: 1rem; }
+    .pol { margin-bottom: 1.6rem; }
+    .pol-in { padding: 6px 6px 8px; }
+    .tape { width: 60px; height: 22px; margin-left: -30px; top: -10px; }
+    :global(.c-doodle) { width: 48px !important; height: 48px !important; }
+  }
+</style>

@@ -1,0 +1,72 @@
+---
+import Doodle from './Doodle.astro';
+const { title, lines, from } = Astro.props;
+---
+<section class="letter-section" id="carta">
+  <Doodle type="heart" color="var(--berry)" tint="#f7a9bb" size={54} rot={-12} speed={0.3} style="top:6%;left:10%" class="l-d" />
+  <Doodle type="sparkle" color="var(--butter)" tint="#fbe29a" size={50} speed={0.45} style="top:18%;right:10%" class="l-d" />
+  <Doodle type="star" color="var(--sky)" tint="#d6e8fa" size={44} rot={14} speed={0.2} style="bottom:12%;left:12%" class="l-d" />
+
+  <p class="invite hand" data-env-invite>una cosita más… ábrela</p>
+
+  <div class="env-wrap" data-env-wrap>
+    <button class="env" type="button" data-env aria-label="Abrir la carta">
+      <svg class="env-svg" viewBox="0 0 380 250" aria-hidden="true" style="filter:url(#wobble)">
+        <rect x="4" y="4" width="372" height="242" rx="10" fill="#f7a98b" stroke="#3b2a2a" stroke-width="4" />
+        <path class="front" d="M4 14 L190 140 L376 14 V236 Q376 246 366 246 H14 Q4 246 4 236 Z" fill="#fbbfa6" stroke="#3b2a2a" stroke-width="4" stroke-linejoin="round" />
+      </svg>
+      <svg class="flap" viewBox="0 0 380 140" data-flap aria-hidden="true" style="filter:url(#wobble)">
+        <path d="M4 10 Q4 4 12 4 H368 Q376 4 376 10 L190 134 Z" fill="#f48f6c" stroke="#3b2a2a" stroke-width="4" stroke-linejoin="round" />
+        <path d="M190 100 c -16 -16 -30 -2 -16 12 l 16 14 l 16 -14 c 14 -14 0 -28 -16 -12 z" fill="#e0476a" stroke="#3b2a2a" stroke-width="3.5" stroke-linejoin="round" transform="translate(0 -10)" />
+      </svg>
+    </button>
+
+    <article class="paper" data-paper aria-label="Carta">
+      <h2 class="p-title">{title}</h2>
+      <div class="p-body">
+        {lines.map((l: string) => <p data-line>{l}</p>)}
+      </div>
+      <p class="p-sign" data-line>— {from}</p>
+    </article>
+  </div>
+  <p class="fin hand" data-fin>fin</p>
+</section>
+
+<style>
+  .letter-section { position: relative; padding: 9rem 1.25rem 7rem; text-align: center; overflow: hidden; }
+  :global(.l-d) { z-index: 0; }
+  .invite { position: relative; z-index: 1; margin: 0 0 1.4rem; font-size: 2rem; transform: rotate(-2deg); }
+
+  .env-wrap { position: relative; z-index: 1; width: min(380px, 88vw); height: calc(min(380px, 88vw) * 0.658); margin: 0 auto; }
+  .env { all: unset; position: absolute; inset: 0; cursor: pointer; perspective: 900px; display: block; }
+  .env:focus-visible { outline: 3px solid var(--sky); outline-offset: 6px; border-radius: 12px; }
+  .env-svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; filter: drop-shadow(0 14px 14px rgba(59, 42, 42, 0.3)); }
+  .flap { position: absolute; left: 0; top: 0; width: 100%; height: 56%; overflow: visible; transform-origin: 50% 0; z-index: 3; }
+  .env:hover .flap { transform: rotateX(14deg); transition: transform 0.3s; }
+
+  .paper {
+    position: absolute; left: 50%; top: 0; width: min(520px, 92vw); transform: translateX(-50%); visibility: hidden; text-align: left;
+    background: #fffdf8; padding: 2.2rem 2rem 2rem 2.6rem; border-radius: 4px; z-index: 5;
+    box-shadow: 0 1px 0 rgba(59, 42, 42, 0.08), 0 20px 34px -14px rgba(59, 42, 42, 0.5);
+    background-image: linear-gradient(90deg, transparent 2rem, rgba(224, 71, 106, 0.4) 2rem 2.12rem, transparent 2.12rem),
+      repeating-linear-gradient(transparent 0 2.1rem, rgba(127, 181, 234, 0.45) 2.1rem 2.18rem);
+    background-position: 0 0, 0 4.1rem;
+    font-family: var(--hand); font-weight: 500;
+  }
+  .paper::before {
+    content: ''; position: absolute; top: -13px; left: 50%; width: 96px; height: 28px; margin-left: -48px; transform: rotate(-3deg);
+    background: #a9d6b8; opacity: 0.9; background-image: repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.4) 0 5px, transparent 5px 11px);
+  }
+  .p-title { margin: 0 0 0.7rem; font-family: var(--display); font-weight: 400; font-size: 3rem; color: var(--berry); line-height: 1.1; }
+  .p-body p, .p-sign { margin: 0; font-size: 1.75rem; line-height: 2.1rem; padding-bottom: 2.1rem; }
+  .p-sign { font-family: var(--display); font-size: 2.2rem; text-align: right; padding-bottom: 0; color: var(--ink); }
+
+  .fin { position: relative; z-index: 1; margin: 7rem 0 0; font-size: 2.2rem; opacity: 0.6; }
+
+  @media (max-width: 560px) {
+    .letter-section { padding-top: 6rem; }
+    .paper { padding: 1.7rem 1.1rem 1.5rem 2.2rem; }
+    .p-body p { font-size: 1.5rem; }
+    .p-title { font-size: 2.5rem; }
+  }
+</style>

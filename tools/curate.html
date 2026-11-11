@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Curador de fotos</title>
+<style>
+  :root { --cream:#f7efdf; --ink:#3b2a2a; --berry:#e0476a; --sky:#7fb5ea; --butter:#f5c242; --line:#d9c9a8; }
+  * { box-sizing: border-box; }
+  body { margin:0; font:16px/1.35 system-ui, sans-serif; color:var(--ink); background:var(--cream); height:100vh; display:flex; flex-direction:column; }
+  header { display:flex; align-items:center; gap:1rem; padding:.6rem 1rem; background:#fffdf8; border-bottom:2px solid var(--ink); flex-wrap:wrap; }
+  header h1 { font-size:1.1rem; margin:0; }
+  header .sp { flex:1; }
+  #status { font-size:.85rem; opacity:.7; }
+  button { cursor:pointer; border:2px solid var(--ink); background:#fffdf8; border-radius:8px; padding:.35rem .7rem; font:inherit; font-size:.9rem; }
+  button:hover { background:var(--butter); }
+  button.pri { background:var(--berry); color:#fff; }
+  main { flex:1; display:grid; grid-template-columns: 340px 1fr; min-height:0; }
+  aside { border-right:2px solid var(--ink); overflow:auto; padding:.8rem; background:#fbf4e6; }
+  section.cats { overflow:auto; padding:1rem 1.2rem 5rem; display:flex; flex-direction:column; gap:1.4rem; }
+  h2 { font-size:.95rem; margin:.1rem 0 .6rem; }
+  .grid { display:grid; gap:.6rem; min-height:90px; padding:.5rem; border:2px dashed var(--line); border-radius:10px; align-content:start; }
+  aside .grid { grid-template-columns: repeat(2, 1fr); }
+  section .grid { grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); }
+  .grid.over { border-color:var(--berry); background:rgba(224,71,106,.07); }
+  .card { background:#fffdf8; border:2px solid var(--ink); border-radius:8px; overflow:hidden; cursor:grab; display:flex; flex-direction:column; }
+  .card.drag { opacity:.35; }
+  .card.before { box-shadow:-5px 0 0 var(--berry); }
+  .card .im { position:relative; aspect-ratio:1; background:#eee; }
+  .card img { width:100%; height:100%; object-fit:cover; display:block; cursor:zoom-in; }
+  .card .n { position:absolute; top:4px; left:4px; background:var(--ink); color:#fff; font-size:.7rem; padding:1px 6px; border-radius:99px; }
+  .card textarea { border:0; border-top:2px solid var(--ink); resize:none; padding:.4rem; font:inherit; font-size:.85rem; width:100%; height:3.6rem; background:#fffdf8; }
+  .card textarea:focus { outline:none; background:#fff8dd; }
+  .card select { border:0; border-top:1px solid var(--line); font:inherit; font-size:.75rem; padding:.25rem; background:#f4ead6; width:100%; }
+  aside .card textarea, aside .card select { display:none; }
+  aside .card.cap textarea { display:none; }
+  .cat { background:#fffdf8; border:2px solid var(--ink); border-radius:12px; padding:.8rem; }
+  .cat-head { display:flex; gap:.5rem; align-items:center; margin-bottom:.6rem; flex-wrap:wrap; }
+  .cat-head input { font:inherit; border:2px solid var(--line); border-radius:6px; padding:.3rem .5rem; background:#fff; }
+  .cat-head .t { font-weight:700; flex:2; min-width:180px; font-size:1.05rem; }
+  .cat-head .nt { flex:2; min-width:160px; }
+  .count { font-size:.8rem; opacity:.6; }
+  .meta { background:#fffdf8; border:2px solid var(--ink); border-radius:12px; padding:.8rem; display:grid; gap:.5rem; }
+  .meta label { display:grid; gap:.15rem; font-size:.8rem; font-weight:600; }
+  .meta input, .meta textarea { font:inherit; font-weight:400; border:2px solid var(--line); border-radius:6px; padding:.35rem .5rem; width:100%; }
+  .row3 { display:grid; grid-template-columns:2fr 1fr 2fr; gap:.5rem; }
+  #big { position:fixed; inset:0; background:rgba(40,28,28,.9); display:none; place-items:center; z-index:10; cursor:zoom-out; }
+  #big.on { display:grid; }
+  #big img { max-width:92vw; max-height:92vh; border:10px solid #fffdf8; }
+  .hint { font-size:.8rem; opacity:.65; margin:0 0 .6rem; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Curador de fotos 🎀</h1>
+  <button id="addCat" class="pri">+ categoría</button>
+  <span class="sp"></span>
+  <span id="status">cargando…</span>
+</header>
+<main>
+  <aside>
+    <h2>Sin clasificar <span class="count" id="poolCount"></span></h2>
+    <p class="hint">Arrastra las fotos a una categoría.</p>
+    <div class="grid" id="pool" data-zone="pool"></div>
+  </aside>
+  <section class="cats" id="cats"></section>
+</main>
+<div id="big"><img alt=""></div>
+
+<script>
+let S = null, total = 0, saveT = null, dragging = null;
+const $ = (s, r = document) => r.querySelector(s);
+const el = (tag, props = {}, ...kids) => { const e = Object.assign(document.createElement(tag), props); kids.forEach(k => e.append(k)); return e; };
+
+async function load() {
+  const d = await (await fetch('/api/data')).json();
+  total = d.total; delete d.total; S = d; render(); setStatus('guardado');
+}
+function setStatus(t) { $('#status').textContent = t; }
+function save() {
+  setStatus('guardando…'); clearTimeout(saveT);
+  saveT = setTimeout(async () => {
+    const r = await fetch('/api/data', { method: 'POST', body: JSON.stringify(S) });
+    setStatus(r.ok ? '✓ guardado ' + new Date().toLocaleTimeString() : '⚠ error al guardar');
+  }, 350);
+}
+const assigned = () => new Set(S.categories.flatMap(c => c.photos));
+const pad = n => String(n).padStart(2, '0');
+
+function card(n) {
+  const c = el('div', { className: 'card', draggable: true });
+  c.dataset.n = n;
+  const img = el('img', { src: `/photos/p${pad(n)}.jpg`, loading: 'lazy', draggable: false });
+  img.onclick = () => { $('#big img').src = img.src; $('#big').classList.add('on'); };
+  c.append(el('div', { className: 'im' }, img, el('span', { className: 'n', textContent: n })));
+  const ta = el('textarea', { placeholder: 'describe esta foto…', value: S.captions[n] || '' });
+  ta.oninput = () => { const v = ta.value.trim(); if (v) S.captions[n] = ta.value; else delete S.captions[n]; save(); };
+  ta.ondragstart = e => e.preventDefault();
+  c.append(ta);
+  const sel = el('select');
+  sel.append(el('option', { value: '', textContent: 'mover a…' }), el('option', { value: 'pool', textContent: '↩ sin clasificar' }));
+  S.categories.forEach(k => sel.append(el('option', { value: k.id, textContent: k.title || '(sin título)' })));
+  sel.onchange = () => { if (sel.value) { move(n, sel.value, null); } };
+  c.append(sel);
+  c.ondragstart = e => { dragging = n; c.classList.add('drag'); e.dataTransfer.effectAllowed = 'move'; e.dataTransfer.setData('text/plain', n); };
+  c.ondragend = () => { dragging = null; document.querySelectorAll('.drag,.before,.over').forEach(x => x.classList.remove('drag', 'before', 'over')); };
+  c.ondragover = e => { if (dragging == null || dragging == n) return; e.preventDefault(); e.stopPropagation(); document.querySelectorAll('.before').forEach(x => x.classList.remove('before')); c.classList.add('before'); };
+  c.ondrop = e => { e.preventDefault(); e.stopPropagation(); const zone = c.parentElement.dataset.zone; move(dragging, zone, n); };
+  return c;
+}
+
+function move(n, zone, beforeN) {
+  S.categories.forEach(k => k.photos = k.photos.filter(x => x != n));
+  if (zone !== 'pool') {
+    const k = S.categories.find(k => k.id === zone);
+    const i = beforeN != null ? k.photos.indexOf(+beforeN) : -1;
+    if (i >= 0) k.photos.splice(i, 0, +n); else k.photos.push(+n);
+  }
+  render(); save();
+}
+
+function zone(div, id) {
+  div.dataset.zone = id;
+  div.ondragover = e => { if (dragging == null) return; e.preventDefault(); div.classList.add('over'); };
+  div.ondragleave = e => { if (e.target === div) div.classList.remove('over'); };
+  div.ondrop = e => { e.preventDefault(); move(dragging, id, null); };
+}
+
+function render() {
+  const keep = document.activeElement;
+  const pool = $('#pool'); pool.innerHTML = ''; zone(pool, 'pool');
+  const a = assigned(); let free = 0;
+  for (let n = 1; n <= total; n++) if (!a.has(n)) { pool.append(card(n)); free++; }
+  $('#poolCount').textContent = `(${free})`;
+
+  const cats = $('#cats'); cats.innerHTML = '';
+  const meta = el('div', { className: 'meta' });
+  meta.append(el('h2', { textContent: 'Datos del sitio' }));
+  const f = (label, key, type = 'text') => { const i = el('input', { type, value: S.meta[key] ?? '' }); i.oninput = () => { S.meta[key] = type === 'number' ? (i.value === '' ? null : +i.value) : i.value; save(); }; return el('label', {}, label, i); };
+  meta.append(el('div', { className: 'row3' }, f('Nombre de tu hermana', 'name'), f('Edad (vacío = no mostrar)', 'age', 'number'), f('Firma (de parte de)', 'from')));
+  const lt = el('textarea', { rows: 5, value: S.meta.letter.join('\n') });
+  lt.oninput = () => { S.meta.letter = lt.value.split('\n').filter(l => l.trim()); save(); };
+  meta.append(f('Título de la carta', 'letterTitle'), el('label', {}, 'Carta (un párrafo por línea)', lt));
+  cats.append(meta);
+
+  S.categories.forEach((k, i) => {
+    const head = el('div', { className: 'cat-head' });
+    const t = el('input', { className: 't', value: k.title, placeholder: 'Título de la categoría' }); t.oninput = () => { k.title = t.value; save(); };
+    const nt = el('input', { className: 'nt', value: k.note, placeholder: 'notita a mano (opcional)' }); nt.oninput = () => { k.note = nt.value; save(); };
+    const up = el('button', { textContent: '↑', title: 'subir', disabled: i === 0 }); up.onclick = () => { [S.categories[i-1], S.categories[i]] = [S.categories[i], S.categories[i-1]]; render(); save(); };
+    const dn = el('button', { textContent: '↓', title: 'bajar', disabled: i === S.categories.length - 1 }); dn.onclick = () => { [S.categories[i+1], S.categories[i]] = [S.categories[i], S.categories[i+1]]; render(); save(); };
+    const del = el('button', { textContent: '🗑', title: 'borrar categoría (las fotos vuelven a sin clasificar)' });
+    del.onclick = () => { if (!k.photos.length || confirm(`¿Borrar "${k.title}"? Sus ${k.photos.length} fotos vuelven a "sin clasificar".`)) { S.categories.splice(i, 1); render(); save(); } };
+    head.append(el('span', { className: 'count', textContent: `#${i + 1}` }), t, nt, el('span', { className: 'count', textContent: `${k.photos.length} fotos` }), up, dn, del);
+    const g = el('div', { className: 'grid' }); zone(g, k.id);
+    k.photos.forEach(n => g.append(card(n)));
+    cats.append(el('div', { className: 'cat' }, head, g));
+  });
+  if (keep && keep.tagName === 'TEXTAREA') {} // los textareas se reconstruyen al mover fotos; guardar ya ocurrió
+}
+
+$('#addCat').onclick = () => {
+  S.categories.push({ id: 'c' + Date.now(), title: 'Nueva categoría', note: '', photos: [] });
+  render(); save(); $('#cats').lastElementChild.scrollIntoView({ behavior: 'smooth' });
+};
+$('#big').onclick = () => $('#big').classList.remove('on');
+addEventListener('keydown', e => { if (e.key === 'Escape') $('#big').classList.remove('on'); });
+load();
+</script>
+</body>
+</html>

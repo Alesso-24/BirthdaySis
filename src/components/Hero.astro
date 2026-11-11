@@ -1,0 +1,116 @@
+---
+import Doodle from './Doodle.astro';
+const { name, age } = Astro.props;
+const split = (t: string) => [...t].map((c) => (c === ' ' ? ' ' : c));
+const candles = [
+  { x: 128, c: '#7fb5ea' },
+  { x: 164, c: '#f5c242' },
+  { x: 200, c: '#e0476a' },
+  { x: 236, c: '#8fc3a0' },
+  { x: 272, c: '#b9a4e6' },
+];
+---
+<header class="hero" id="top">
+  <Doodle type="sun" color="var(--butter)" tint="#fbe29a" size={92} rot={-8} class="h-d1" />
+  <Doodle type="flower" color="var(--berry)" tint="#f7a9bb" size={70} rot={12} class="h-d2" />
+  <Doodle type="sparkle" color="var(--sky)" tint="#cfe4fa" size={48} class="h-d3" />
+  <Doodle type="heart" color="var(--berry)" tint="#f7a9bb" size={44} rot={-14} class="h-d4" />
+  <Doodle type="star" color="var(--sage)" tint="#cfe8d6" size={52} rot={10} class="h-d5" />
+  <Doodle type="squiggle" color="var(--lilac)" size={90} rot={-6} class="h-d6" />
+
+  <h1 class="title" aria-label={`Feliz cumpleaños, ${name}`}>
+    <span class="line l1" aria-hidden="true">{split('Feliz cumpleaños').map((c) => <span class="ch" data-in>{c}</span>)}</span>
+    <span class="line l2" aria-hidden="true">
+      <span class="hl" data-hl></span>
+      {split(name).map((c) => <span class="ch name-ch" data-in>{c}</span>)}
+      {age && <span class="age" data-in>{age}</span>}
+    </span>
+  </h1>
+
+  <div class="cake-wrap" data-in id="cake-wrap">
+    <svg class="cake" viewBox="0 0 400 360" role="group" aria-label="Pastel con velitas" style="filter:url(#wobble)">
+      <ellipse cx="200" cy="322" rx="172" ry="22" fill="#fffdf8" stroke="#3b2a2a" stroke-width="4" />
+      <!-- piso de abajo -->
+      <rect x="60" y="214" width="280" height="104" rx="14" fill="#f48fa8" stroke="#3b2a2a" stroke-width="4" />
+      <path d="M60 228 q 20 24 40 0 t 40 0 t 40 0 t 40 0 t 40 0 t 40 0 t 40 0 V214 H60 Z" fill="#fffdf8" stroke="#3b2a2a" stroke-width="4" stroke-linejoin="round" />
+      <g stroke="#3b2a2a" stroke-width="5" stroke-linecap="round">
+        <path d="M92 262 l8 -6" stroke="#f5c242" /><path d="M130 280 l7 7" stroke="#7fb5ea" /><path d="M170 258 l8 5" stroke="#fffdf8" />
+        <path d="M214 284 l8 -5" stroke="#8fc3a0" /><path d="M254 260 l7 6" stroke="#f5c242" /><path d="M296 282 l8 -4" stroke="#fffdf8" />
+        <path d="M110 300 l6 -5" stroke="#b9a4e6" /><path d="M276 302 l7 5" stroke="#7fb5ea" />
+      </g>
+      <!-- piso de arriba -->
+      <rect x="105" y="142" width="190" height="74" rx="12" fill="#fff0c9" stroke="#3b2a2a" stroke-width="4" />
+      <path d="M105 156 q 16 20 32 0 t 32 0 t 32 0 t 32 0 t 32 0 t 30 0 V142 H105 Z" fill="#fffdf8" stroke="#3b2a2a" stroke-width="4" stroke-linejoin="round" />
+      <path d="M200 180 c -14 -14 -26 -2 -14 10 l 14 12 l 14 -12 c 12 -12 0 -24 -14 -10 z" fill="#e0476a" stroke="#3b2a2a" stroke-width="3.5" stroke-linejoin="round" />
+
+      {candles.map((k, i) => (
+        <g class="candle" data-candle role="button" tabindex="0" aria-label={`Soplar la velita ${i + 1}`} transform={`translate(${k.x} 0)`}>
+          <rect x="-18" y="40" width="36" height="106" fill="transparent" />
+          <rect x="-6" y="96" width="12" height="48" rx="3" fill={k.c} stroke="#3b2a2a" stroke-width="3.5" />
+          <path d="M-6 112 l12 -7 M-6 126 l12 -7" stroke="#fffdf8" stroke-width="3.5" stroke-linecap="round" />
+          <path d="M0 96 V86" stroke="#3b2a2a" stroke-width="3" stroke-linecap="round" />
+          <g class="flame" data-flame>
+            <path d="M0 52 C 12 68 10 82 0 86 C -10 82 -12 68 0 52 Z" fill="#f5a623" stroke="#3b2a2a" stroke-width="3" stroke-linejoin="round" />
+            <path d="M0 68 C 5 74 4 80 0 82 C -4 80 -5 74 0 68 Z" fill="#fff3b0" />
+          </g>
+          <path class="smoke" d="M0 80 c 8 -10 -8 -18 0 -30 c 6 -9 -4 -14 2 -22" fill="none" stroke="#3b2a2a" stroke-width="3" stroke-linecap="round" opacity="0" />
+        </g>
+      ))}
+    </svg>
+  </div>
+
+  <p class="hint hand" data-in id="hint" aria-live="polite">
+    <span class="hint-text">toca las velitas para apagarlas</span>
+  </p>
+  <Doodle type="arrow" color="var(--ink)" size={70} rot={168} draw class="h-arrow" />
+
+  <a class="scroll-cue hand" href="#collage" data-in data-scroll-to="#collage" aria-label="Ir al collage">
+    bajar
+    <svg viewBox="0 0 24 40" width="22" height="34" aria-hidden="true" style="filter:url(#wobble)"><path d="M12 3 V33 M4 25 L12 34 L20 25" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" /></svg>
+  </a>
+</header>
+
+<style>
+  .hero {
+    position: relative; min-height: 100svh; display: flex; flex-direction: column; align-items: center; justify-content: center;
+    padding: 4.5rem 1rem 3rem; text-align: center; overflow: hidden;
+  }
+  .title { margin: 0; font-family: var(--display); font-weight: 400; line-height: 1; position: relative; z-index: 2; }
+  .line { display: block; white-space: nowrap; }
+  .ch { display: inline-block; will-change: transform; cursor: default; }
+  .l1 { font-size: clamp(2.5rem, 9.5vw, 6rem); color: var(--ink); transform: rotate(-2deg); }
+  .l2 { position: relative; font-size: clamp(3.6rem, 16vw, 10rem); color: var(--berry); margin-top: -0.05em; transform: rotate(1.5deg); display: inline-block; }
+  .l2 .hl {
+    position: absolute; left: -3%; right: -3%; bottom: 6%; height: 38%; background: var(--butter); z-index: -1;
+    border-radius: 10px 24px 12px 22px; transform: rotate(-1.2deg) scaleX(0); transform-origin: left center; filter: url(#wobble);
+  }
+  .rm .l2 .hl { transform: rotate(-1.2deg) scaleX(1); }
+  .age {
+    display: inline-grid; place-items: center; width: 0.55em; height: 0.55em; margin-left: 0.25em; vertical-align: top;
+    font-size: 0.55em; border-radius: 50%; background: var(--sky); color: #fff; border: 4px solid var(--ink);
+    transform: rotate(14deg); text-shadow: 2px 2px 0 var(--ink);
+  }
+
+  .cake-wrap { width: min(400px, 78vw); margin-top: 1.5rem; z-index: 2; }
+  .cake { width: 100%; height: auto; overflow: visible; display: block; }
+  .candle { cursor: pointer; outline: none; }
+  .candle:focus-visible .flame { filter: drop-shadow(0 0 6px var(--berry)); }
+  .flame { transform-box: fill-box; transform-origin: 50% 100%; }
+
+  .hint { margin: 0.6rem 0 0; font-size: clamp(1.6rem, 4.4vw, 2.2rem); color: var(--ink); position: relative; z-index: 2; }
+  :global(.h-arrow) { left: 50%; margin-left: 150px; bottom: 21%; opacity: 0.8; }
+  .scroll-cue {
+    position: absolute; bottom: 1.1rem; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center;
+    gap: 0; font-size: 1.5rem; text-decoration: none; color: var(--ink); opacity: 0.75;
+  }
+
+  :global(.h-d1) { top: 9%; left: 7%; } :global(.h-d2) { top: 14%; right: 8%; } :global(.h-d3) { top: 38%; left: 16%; }
+  :global(.h-d4) { bottom: 22%; left: 8%; } :global(.h-d5) { bottom: 26%; right: 9%; } :global(.h-d6) { top: 30%; right: 18%; }
+
+  @media (max-width: 640px) {
+    :global(.h-arrow) { display: none; }
+    :global(.h-d1) { top: 4%; left: 2%; width: 64px; height: 64px; } :global(.h-d2) { top: 5%; right: 3%; width: 52px; height: 52px; }
+    :global(.h-d3), :global(.h-d6) { display: none; }
+    :global(.h-d4) { bottom: 14%; left: 3%; width: 34px; height: 34px; } :global(.h-d5) { bottom: 16%; right: 4%; width: 40px; height: 40px; }
+  }
+</style>
