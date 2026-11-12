@@ -4,11 +4,11 @@ Regalo de cumpleaños (18 años) de **Jordi** para su hermana **Verónica**: un 
 Repo: `Alesso-24/BirthdaySis` (https://github.com/Alesso-24/BirthdaySis). Local: `C:\Users\jordi\BirthdaySis`.
 Publicación prevista: GitHub Pages en `https://alesso-24.github.io/BirthdaySis/` (ya configurado `site` y `base` en `astro.config.mjs`).
 
-## Estado (2026-11-11)
-- Sitio Astro 7 completo y compilando (`npx astro build` OK). **Nada commiteado ni publicado**: el repo remoto sigue vacío.
-- Falta: que Jordi revise el diseño en su navegador, y cuando lo pida, commit + push + deploy.
-- No pude revisarlo visualmente yo mismo: la extensión de Chrome (claude-in-chrome) no respondió. Verificado solo con build + curl.
-- Regla de trabajo del usuario: **no publicar/deployar hasta que lo pida**; revisión visual en su navegador antes; simple > llamativo (aunque aquí pidió "wow").
+## Estado (2026-11-11) — VERSIÓN FINAL PUBLICADA
+- **En línea:** https://alesso-24.github.io/BirthdaySis/ (GitHub Pages, repo público, workflow `.github/workflows/deploy.yml` con `withastro/action`; cada push a `main` se republica en ~2 min).
+- Jordi dio el visto bueno final ("listo así queda"). Último commit publicado: título de carta "Para ti, mi Verito...".
+- Reglas del usuario: publicar solo cuando lo pida; revisión visual en su navegador; simple > llamativo.
+- La extensión de Chrome (claude-in-chrome) nunca respondió; la verificación visual se hizo con Edge headless + puppeteer-core.
 
 ## Stack
 Astro 7.4 · GSAP 3.15 (ScrollTrigger, Draggable, InertiaPlugin — todos gratis) · Lenis (scroll suave) · canvas-confetti · fuentes @fontsource (Caveat Brush, Caveat, Gaegu) · sharp (Astro optimiza a webp).
@@ -29,11 +29,11 @@ Astro 7.4 · GSAP 3.15 (ScrollTrigger, Draggable, InertiaPlugin — todos gratis
 - `npm run curate` → http://localhost:4400 (curador; guardado automático)
 - `npm run build` → `dist/`
 
-## Datos actuales
-Nombre: Verónica · edad: 18 · firma: Jordi. Categorías (historia): chiquita y traviesa (5) · aventuras de niños (9) · tú y yo (12) · con el amor de papá y mamá (6) · la familia (8) · Duke y compañía (5) · tú, tal cual (7). Total 52.
-Pies de foto escritos por Jordi (corregí solo erratas/acentos). 16 fotos sin descripción: 2, 5, 10, 11, 12, 13, 14, 15, 16, 21, 22, 30, 43, 45, 51, 52. Foto 42 ("cuando nos mudamos a Puebla") puesta en "la familia"; época incierta.
-La carta es un borrador mío basado en sus descripciones; Jordi puede reescribirla.
-Duke = perro actual; el Quinto = perro anterior (foto 7).
+## Datos finales
+Nombre: Verónica · edad: 18 · firma: Jordi. Título de carta: "Para ti, mi Verito...". Carta escrita por Jordi (solo ajusté puntuación/acentos; "con todo con medicina" = échale ganas con la carrera).
+Categorías (historia, 52 fotos): chiquita y traviesa (5) · aventuras de niños (9) · tú y yo (12) · con el amor de papá y mamá (6) · la familia (8) · Duke y compañía (5) · tú, tal cual (7).
+Pies de foto reescritos en limpio (sin "contexto para mí" ni paréntesis). Duke = perro actual; el Quinto = perro anterior. 16 fotos sin pie (2, 5, 10–16, 21, 22, 30, 43, 45, 51, 52) y así quedan.
+Pendiente menor: fotos con papá en grupo (14, 15, 35 en "la familia") — Jordi no confirmó cuáles pasar a la sección de padres.
 
 ## Decisiones de diseño
 - Look "no hecho por IA": paleta cálida propia (crema, berry, butter, sage, sky, lilac, peach), tinta marrón, papel con grano y puntos, cinta washi con borde irregular, garabatos SVG con filtro de ondulación, rotaciones deterministas por foto, sin emojis en la UI del sitio.
@@ -47,14 +47,13 @@ Duke = perro actual; el Quinto = perro anterior (foto 7).
 - `<meta name="robots" content="noindex">` está puesto a propósito (es un regalo privado).
 - Fuentes vienen de @fontsource (sin depender de Google Fonts en runtime).
 
-## Próximos pasos
-1. Jordi revisa el diseño en su navegador y reporta qué ajustar (tamaños, garabatos, tarta, carta).
-2. Resolver dudas: foto 42, orden de "tú y yo", describir las 16 fotos sin pie.
-3. Cuando él lo pida: `git add/commit/push` (rama main) y activar GitHub Pages (workflow `withastro/action` o Settings → Pages → GitHub Actions). Atribución de commits según el system-reminder.
-4. Opcional: probar en celular real; revisar rendimiento (52 imágenes lazy) y accesibilidad.
+## Cómo cambiar algo después
+1. `npm run curate` (http://localhost:4400) para fotos, categorías, pies, nombre y carta → guarda en `src/data/collage.json`; o editar ese JSON a mano.
+2. `git add -A && git commit && git push` → se republica solo.
+3. Nunca commitear `node_modules`/`dist` (ya en .gitignore).
 
 ## Responsive (2026-11-11, sin publicar aún)
 Probado con Edge headless + puppeteer-core (scripts en el scratchpad de la sesión, no en el repo) en 360x740, 390x844, 844x390, 768x1024, 1440x900 y 2560x1300: sin desborde horizontal ni errores de consola, visor y carta funcionan.
-Arreglos: `overflow-x: clip` también en `html` (los garabatos con `right:-1%` ensanchaban el viewport móvil); sello de edad rediseñado; visor con `minmax(0,1fr)` para que quepa el botón "siguiente" en móvil; hero compacto en horizontal bajo 560 px de alto; muro de 4 columnas desde 1500 px y 5 desde 2200 px; flecha de la tarta dentro del hint; cinta de polaroid aparece después de que la foto aterriza.
+Arreglos aplicados: `overflow-x: clip` también en `html` (los garabatos con `right:-1%` ensanchaban el viewport móvil); sello de edad rediseñado; visor con `minmax(0,1fr)` para que quepa el botón "siguiente" en móvil; hero compacto en horizontal bajo 560 px de alto; muro de 4 columnas desde 1500 px y 5 desde 2200 px; flecha de la tarta dentro del hint; cinta de polaroid aparece después de que la foto aterriza.
 La barra oscura inferior en capturas es la **Astro dev toolbar** (solo en dev).
-**Estos cambios están solo en local: falta commit + push para que el link público los tenga.**
+Todo lo anterior ya está publicado.
