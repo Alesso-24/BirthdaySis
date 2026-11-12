@@ -5,7 +5,7 @@
     "from": "Jordi",
     "letterTitle": "Para ti",
     "letter": [
-      "Aquí junté un poco de todo lo que hemos vivido: tú de chiquita y traviesa, el cerro y los campamentos, la guitarra, el Duke, mamá, la familia entera.",
+      "Aquí junté un poco de todo lo que hemos vivido: tú de chiquita y traviesa, el cerro y los campamentos, la guitarra, el Duke, mamá y papá, la familia entera.",
       "Gracias por ser mi compañera de aventuras, mi cómplice y la que siempre me hace reír.",
       "Que este año te traiga todo lo bonito que mereces. Te quiero muchísimo."
     ]
@@ -17,7 +17,6 @@
       "note": "así empezó todo",
       "photos": [
         24,
-        40,
         41,
         17,
         50,
@@ -61,9 +60,10 @@
     },
     {
       "id": "c4",
-      "title": "mamá",
-      "note": "la que más te ama",
+      "title": "con el amor de papá y mamá",
+      "note": "los que más nos quieren",
       "photos": [
+        40,
         6,
         49,
         47,

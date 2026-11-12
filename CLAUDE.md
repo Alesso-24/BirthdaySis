@@ -30,7 +30,7 @@ Astro 7.4 · GSAP 3.15 (ScrollTrigger, Draggable, InertiaPlugin — todos gratis
 - `npm run build` → `dist/`
 
 ## Datos actuales
-Nombre: Verónica · edad: 18 · firma: Jordi. Categorías (historia): chiquita y traviesa (6) · aventuras de niños (9) · tú y yo (12) · mamá (5) · la familia (8) · Duke y compañía (5) · tú, tal cual (7). Total 52.
+Nombre: Verónica · edad: 18 · firma: Jordi. Categorías (historia): chiquita y traviesa (5) · aventuras de niños (9) · tú y yo (12) · con el amor de papá y mamá (6) · la familia (8) · Duke y compañía (5) · tú, tal cual (7). Total 52.
 Pies de foto escritos por Jordi (corregí solo erratas/acentos). 16 fotos sin descripción: 2, 5, 10, 11, 12, 13, 14, 15, 16, 21, 22, 30, 43, 45, 51, 52. Foto 42 ("cuando nos mudamos a Puebla") puesta en "la familia"; época incierta.
 La carta es un borrador mío basado en sus descripciones; Jordi puede reescribirla.
 Duke = perro actual; el Quinto = perro anterior (foto 7).
